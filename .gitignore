@@ -1,0 +1,16 @@
+build/
+
+sensor_models/*
+
+sat_sim
+log.bin
+conf.txt
+
+.ccls
+tags
+.cache
+init.lua
+compile_flags.txt
+compile_commands.json
+
+tools/plotter/__pycache__/

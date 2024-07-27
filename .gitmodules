@@ -1,0 +1,6 @@
+[submodule "src/cubesat_sim_math"]
+	path = src/cubesat_sim_math
+	url = https://gitlab.com/cubesat-simulator/submodules/cubesat_sim_math.git
+[submodule "src/cubesat_sim_debug"]
+	path = src/cubesat_sim_debug
+	url = https://gitlab.com/cubesat-simulator/submodules/cubesat_sim_debug.git
