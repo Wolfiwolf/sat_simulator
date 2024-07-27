@@ -13,7 +13,6 @@
 #include <thread>
 #include <unistd.h>
 #include <unordered_map>
-#include <iostream>
 
 #include "data_streams/web_socket_server/web_socket_server.hpp"
 #include "web_socket_data_stream.hpp"
@@ -89,7 +88,6 @@ void WebSocketDataStream::_listener(WebSocketDataStream *web_socket_data_stream)
 			web_socket_data_stream->_cond_var.wait(*(web_socket_data_stream->_lock));
 
 		web_socket_data_stream->_ws_server->wait_for_connection();
-		std::cout << "New connection\n";
 
 		web_socket_data_stream->_is_connected = true;
 		web_socket_data_stream->_cond_var.notify_all();

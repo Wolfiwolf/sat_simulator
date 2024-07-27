@@ -1,5 +1,4 @@
 #include <fstream>
-#include <iostream>
 #include <sstream>
 
 #include "files/model_3d_file/model_3d_file.hpp"

@@ -120,8 +120,6 @@ void Simulation::_output_task(Simulation *sim)
 			o->output(sim->get_time());
 
 		prev_t = std::chrono::high_resolution_clock::now();
-
-		std::cout << "Juhu\n";
 	}
 }
 
