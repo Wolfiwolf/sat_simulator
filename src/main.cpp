@@ -49,7 +49,7 @@ int main()
 	core::CubesatModel sat(&physics_model);
 	core::DataStreamSimulationApi *ds_simulation_api;
 
-	sat_sim::debug::Logger::Log("### CubeSat simulator ###", sat_sim::debug::LogLevel::SUCCESS);
+	sat_sim::debug::Logger::Log("### Sat Simulator ###", sat_sim::debug::LogLevel::SUCCESS);
 
 	// Setting up signal handlers
 	signal(SIGPIPE, SIG_IGN);
@@ -62,7 +62,7 @@ int main()
 	cache_manager.init(&cache_storage);
 
 	// Reading config file
-	if (!config_file.load("sat_sim_conf.txt")) {
+	if (!config_file.load("conf.txt")) {
 		sat_sim::debug::Logger::Log("Error in loading config file!", sat_sim::debug::LogLevel::DANGER);
 		return -1;
 	}

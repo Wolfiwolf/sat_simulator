@@ -13,7 +13,7 @@ namespace file_processing
 bool ConfigFile::load(const std::string &filepath)
 {
 	try {
-		std::ifstream config_file("conf.txt");
+		std::ifstream config_file(filepath);
 		std::regex key_val_rgx("^(.+):\\s(.+)$");
 		std::regex array_val_rgx("\\s?(\\w+)[\\s\\|]?+");
 		std::string line;
