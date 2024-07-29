@@ -44,7 +44,7 @@ if not sim_data_stream.start():
     exit(1)
 plotter.start()
 
-plot_on_every = 10
+plot_on_every = 3
 plot_wait_counter = 0
 
 while not new_data_stop_flag:
