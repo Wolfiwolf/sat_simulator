@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <unistd.h>
 
@@ -20,9 +21,8 @@ std::string LinuxSystemInfo::get_user_name()
 
 void LinuxSystemInfo::_get_user_name()
 {
-	char name[40];
+	char *name = getenv("USER");
 
-	getlogin_r(name, 40);
 	_user_name = std::string(name);
 }
 
