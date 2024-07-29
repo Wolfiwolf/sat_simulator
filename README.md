@@ -15,7 +15,11 @@ Currently only Linux is supported. Windows support will probably be added later 
 ## Quick start
 
 ### Installing GeographicLib
-Install geographic lib on your system. The project expects that a libGeographicLib.so file is in the LD_PATH.
+Install geographic lib on your system. The project expects that a libGeographicLib.so file is in the LD_PATH. On ubuntu or debian based systems you can use
+```bash
+sudo apt install libgeographic-dev
+```
+If your ```.so``` file is not named ```libGeographicLib.so```, create a symlink and name it so.
 
 ### Importing sensor models
 Before starting you have to build the sat_simulator_sensor project which will generate sensor models .so files. You have to put these files into the ```sensor_models``` directory in the root of the project.
