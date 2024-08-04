@@ -19,7 +19,7 @@ namespace physics_models
 
 PhysicsModel::PhysicsModel()
 {
-	_mass = 5.0;
+	_mass = 1.0;
 
 	_position_eci[0] = 6371000 + 5000000;
 	_position_eci[1] = 0;
@@ -36,10 +36,6 @@ PhysicsModel::PhysicsModel()
 	_inertial_matrix[2][2] = 1.0;
 
 	_inertial_matrix_inverse = _inertial_matrix;
-
-	_sgp4_model = nullptr;
-
-	_orbit_mode = OrbitMode::SGP4;
 }
 
 PhysicsModel::~PhysicsModel()
@@ -48,7 +44,21 @@ PhysicsModel::~PhysicsModel()
 		delete _sgp4_model;
 }
 
-void PhysicsModel::set_to_sgp4_orbit_mode(const std::string &tle1, const std::string &tle2)
+void PhysicsModel::init(double mass, const Matrix &inertia_matrix, const std::string &tle1,
+                        const std::string &tle2)
+{
+	_mass = mass;
+	_inertial_matrix = inertia_matrix;
+
+	_tle[0] = tle1;
+	_tle[1] = tle2;
+
+	_sgp4_model = new libsgp4::SGP4({_tle[0], _tle[1]});
+	_orbit_mode = OrbitMode::SGP4;
+}
+
+void PhysicsModel::set_to_sgp4_orbit_mode(const std::string &tle1,
+                                          const std::string &tle2)
 {
 	if (_sgp4_model != nullptr)
 		delete _sgp4_model;
@@ -196,8 +206,8 @@ void PhysicsModel::_update_rotation(double delta_t)
 {
 	double mag;
 
-	_rotation_q_eci = _rotation_q_eci + math::Rotations::q_dot(_rotation_q_eci, _angular_velocity_body,
-	                                                           delta_t);
+	_rotation_q_eci = _rotation_q_eci +
+	                  math::Rotations::q_dot(_rotation_q_eci, _angular_velocity_body, delta_t);
 
 	mag = _rotation_q_eci.magnitude();
 	_rotation_q_eci = _rotation_q_eci * (1 / mag);
@@ -207,15 +217,16 @@ void PhysicsModel::_update_rotation(double delta_t)
 
 void PhysicsModel::_update_angular_velocity(double delta_t)
 {
-	_angular_velocity_body =
-	    _angular_velocity_body +
-	    ((_inertial_matrix_inverse * (_moments_body - (_angular_velocity_body.cross(_inertial_matrix * _angular_velocity_body)))) *
-	     delta_t);
+	_angular_velocity_body = _angular_velocity_body +
+	                         ((_inertial_matrix_inverse *
+	                           (_moments_body - (_angular_velocity_body.cross(_inertial_matrix * _angular_velocity_body)))) *
+	                          delta_t);
 }
 
 void PhysicsModel::_update_gravity_gradient(double delta_t)
 {
 	math::Vector rb = math::CoordinateSystems::vec_inertial_to_body(_rotation_euler_ZYX_eci, _position_eci);
+
 	double rbx = rb[0];
 	double rby = rb[1];
 	double rbz = rb[2];
