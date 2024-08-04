@@ -41,6 +41,15 @@ void ConfigFile::_value_to_vector(const std::string &val, std::vector<double> &v
 	}
 }
 
+std::string ConfigFile::_value_to_string(const std::string &val)
+{
+	std::regex pattern("(\\\".*\\\")");
+	std::sregex_iterator begin(val.begin(), val.end(), pattern), end;
+	std::smatch match = *(begin);
+
+	return match.str().substr(1, match.str().size() - 2);
+}
+
 void ConfigFile::_process_line(const std::string &line)
 {
 	std::smatch m;

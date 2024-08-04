@@ -26,6 +26,8 @@ private:
 	static void _value_to_vector(const std::string &val, std::vector<std::string> &vec);
 
 	static void _value_to_vector(const std::string &val, std::vector<double> &vec);
+
+	static std::string _value_to_string(const std::string &val);
 };
 
 } // namespace file_processing
