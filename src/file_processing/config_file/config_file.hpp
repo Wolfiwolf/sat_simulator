@@ -17,6 +17,10 @@ public:
 	std::string output_file;
 	std::string model_file_path;
 	std::string orbit_mode;
+	std::string tle1, tle2;
+	uint64_t start_t;
+	double mass;
+	std::vector<double> inertia_matrix;
 
 	bool load(const std::string &filepath);
 

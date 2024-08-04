@@ -76,12 +76,24 @@ void ConfigFile::_process_line(const std::string &line)
 		} else if (key == "orbit_mode") {
 			if (val == "sgp4")
 				this->orbit_mode = val;
+		} else if (key == "tle1") {
+			this->tle1 = _value_to_string(val);
+		} else if (key == "tle2") {
+			this->tle2 = _value_to_string(val);
+		} else if (key == "start_t") {
+			this->start_t = std::stoull(val);
+		} else if (key == "mass") {
+			this->mass = std::stod(val);
+		} else if (key == "inertia_matrix") {
+			_value_to_vector(val, this->inertia_matrix);
 		}
 	}
 }
 
 bool ConfigFile::load(const std::string &filepath)
 {
+	std::string tmp;
+
 	try {
 		std::ifstream config_file(filepath);
 		std::string line;
@@ -108,6 +120,20 @@ bool ConfigFile::load(const std::string &filepath)
 		if (enabled_output == "data_stream")
 			debug::Logger::Log("    * port: " + std::to_string(this->data_stream_port), debug::LogLevel::SUCCESS);
 	}
+
+	tmp = "inertia_matrix: \n"  + std::to_string(inertia_matrix[0]) + ' ';
+	tmp += std::to_string(inertia_matrix[1]) + ' ';
+	tmp += std::to_string(inertia_matrix[2]) + '\n';
+
+	tmp += std::to_string(inertia_matrix[3]) + ' ';
+	tmp += std::to_string(inertia_matrix[4]) + ' ';
+	tmp += std::to_string(inertia_matrix[5]) + '\n';
+
+	tmp += std::to_string(inertia_matrix[6]) + ' ';
+	tmp += std::to_string(inertia_matrix[7]) + ' ';
+	tmp += std::to_string(inertia_matrix[8]) + '\n';
+
+	debug::Logger::Log(tmp, debug::LogLevel::SUCCESS);
 
 	return true;
 }
