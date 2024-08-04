@@ -29,13 +29,15 @@
 #include "storage/cache_manager/cache_storages/icache_storage.hpp"
 #include "system/system_info/linux_system_info/linux_system_info.hpp"
 
-static void signal_sigint_callback_handler(int signum);
-
-static void stop_all_operations();
-
 using namespace sat_sim;
 
 static sat_sim::core::Simulation *_simulation;
+
+static void signal_sigint_callback_handler(int signum)
+{
+	sat_sim::debug::Logger::Log("Stopping simulator...", sat_sim::debug::LogLevel::DANGER);
+	_simulation->stop();
+}
 
 int main()
 {
@@ -50,7 +52,7 @@ int main()
 	core::CubesatModel sat(&physics_model);
 	core::DataStreamSimulationApi *ds_simulation_api;
 	math::Matrix inertia_matrix(3, 3);
-	
+
 	sat_sim::debug::Logger::Log("### Sat Simulator ###", sat_sim::debug::LogLevel::SUCCESS);
 
 	// Setting up signal handlers
@@ -66,6 +68,7 @@ int main()
 	// Reading config file
 	if (!config_file.load("conf.txt")) {
 		sat_sim::debug::Logger::Log("Error in loading config file!", sat_sim::debug::LogLevel::DANGER);
+
 		return -1;
 	}
 
@@ -138,10 +141,4 @@ int main()
 	delete data_stream;
 
 	return 0;
-}
-
-static void signal_sigint_callback_handler(int signum)
-{
-	sat_sim::debug::Logger::Log("Stopping simulator...", sat_sim::debug::LogLevel::DANGER);
-	_simulation->stop();
 }
