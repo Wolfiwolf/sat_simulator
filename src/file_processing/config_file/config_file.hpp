@@ -24,6 +24,8 @@ private:
 	void _process_line(const std::string &line);
 
 	static void _value_to_vector(const std::string &val, std::vector<std::string> &vec);
+
+	static void _value_to_vector(const std::string &val, std::vector<double> &vec);
 };
 
 } // namespace file_processing

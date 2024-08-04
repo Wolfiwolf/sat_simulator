@@ -26,6 +26,21 @@ void ConfigFile::_value_to_vector(const std::string &val, std::vector<std::strin
 	}
 }
 
+void ConfigFile::_value_to_vector(const std::string &val, std::vector<double> &vec)
+{
+	std::regex pattern("([\\d]+\\.[\\d]+)");
+	std::sregex_iterator begin(val.begin(), val.end(), pattern), end;
+
+	vec.clear();
+
+	while (begin != end) {
+		std::smatch match = *begin;
+
+		vec.push_back(std::stod(match.str()));
+		++begin;
+	}
+}
+
 void ConfigFile::_process_line(const std::string &line)
 {
 	std::smatch m;
