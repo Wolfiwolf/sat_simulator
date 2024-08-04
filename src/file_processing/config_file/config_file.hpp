@@ -17,8 +17,21 @@ public:
 	std::string output_file;
 	std::string model_file_path;
 	std::string orbit_mode;
+	std::string tle1, tle2;
+	uint64_t start_t;
+	double mass;
+	std::vector<double> inertia_matrix;
 
 	bool load(const std::string &filepath);
+
+private:
+	void _process_line(const std::string &line);
+
+	static void _value_to_vector(const std::string &val, std::vector<std::string> &vec);
+
+	static void _value_to_vector(const std::string &val, std::vector<double> &vec);
+
+	static std::string _value_to_string(const std::string &val);
 };
 
 } // namespace file_processing

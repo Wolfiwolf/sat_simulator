@@ -22,6 +22,7 @@
 #include "file_processing/simulation_model_file/simulation_model_file.hpp"
 #include "files/model_3d_file/model_3d_file.hpp"
 #include "files/model_3d_file/obj_file/obj_file.hpp"
+#include "math/matrix/matrix.hpp"
 #include "math/physics_model/physics_model.hpp"
 #include "storage/cache_manager/cache_manager.hpp"
 #include "storage/cache_manager/cache_storages/file_cache_storage/file_cache_storage.hpp"
@@ -48,7 +49,8 @@ int main()
 	math::physics_models::PhysicsModel physics_model;
 	core::CubesatModel sat(&physics_model);
 	core::DataStreamSimulationApi *ds_simulation_api;
-
+	math::Matrix inertia_matrix(3, 3);
+	
 	sat_sim::debug::Logger::Log("### Sat Simulator ###", sat_sim::debug::LogLevel::SUCCESS);
 
 	// Setting up signal handlers
@@ -66,6 +68,21 @@ int main()
 		sat_sim::debug::Logger::Log("Error in loading config file!", sat_sim::debug::LogLevel::DANGER);
 		return -1;
 	}
+
+	// Init PhysicsModel
+	inertia_matrix[0][0] = config_file.inertia_matrix[0];
+	inertia_matrix[0][1] = config_file.inertia_matrix[1];
+	inertia_matrix[0][2] = config_file.inertia_matrix[2];
+
+	inertia_matrix[1][0] = config_file.inertia_matrix[3];
+	inertia_matrix[1][1] = config_file.inertia_matrix[4];
+	inertia_matrix[1][2] = config_file.inertia_matrix[5];
+
+	inertia_matrix[2][0] = config_file.inertia_matrix[6];
+	inertia_matrix[2][1] = config_file.inertia_matrix[7];
+	inertia_matrix[2][2] = config_file.inertia_matrix[8];
+
+	physics_model.init(config_file.mass, inertia_matrix, config_file.tle1, config_file.tle2);
 
 	// Setting up selected data stream
 	if (config_file.data_stream_type == "web_socket")

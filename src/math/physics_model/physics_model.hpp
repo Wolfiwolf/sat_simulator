@@ -49,12 +49,16 @@ protected:
 	math::Matrix _inertial_matrix_inverse;
 
 	libsgp4::SGP4 *_sgp4_model;
+	std::string _tle[2];
 
 	OrbitMode _orbit_mode;
 
 public:
 	PhysicsModel();
 	~PhysicsModel();
+
+	void init(double mass, const Matrix &inertia_matrix, const std::string &tle1,
+	          const std::string &tle2);
 
 	void set_to_sgp4_orbit_mode(const std::string &tle1, const std::string &tle2);
 
