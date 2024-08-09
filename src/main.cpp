@@ -8,6 +8,7 @@
 #include <string>
 #include <thread>
 
+#include "core/sensors/magnetometer_sensor/magnetometer_sensor.hpp"
 #include "core/sensors/sun_sensor/sun_sensor.hpp"
 #include "core/simulation/outputs/data_stream_output/data_stream_output.hpp"
 #include "core/simulation/outputs/file_output/file_output.hpp"
@@ -108,10 +109,14 @@ int main()
 	delete model_file;
 
 	// Creating the cubesat model
-	for (const sat_sim::core::sensors::MagnetometerSensor &sens : sim_model_file.magnetometer_sensors)
-		sat.add_magnetometer_sensor(sens);
-	for (const sat_sim::core::sensors::SunSensor &sens : sim_model_file.sun_sensors)
-		sat.add_sun_sensor(sens);
+	for (core::sensors::MagnetometerSensor &ms : sim_model_file.magnetometer_sensors) {
+		ms.set_physics_model(&physics_model);
+		sat.add_sensor(&ms);
+	}
+	for (sat_sim::core::sensors::SunSensor &ss : sim_model_file.sun_sensors) {
+		ss.set_physics_model(&physics_model);
+		sat.add_sensor(&ss);
+	}
 
 	ds_simulation_api = new core::DataStreamSimulationApi(data_stream);
 	_simulation = new sat_sim::core::Simulation(&sat, ds_simulation_api);

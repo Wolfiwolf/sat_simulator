@@ -2,7 +2,6 @@
 #include <string.h>
 #include <unordered_map>
 
-#include "core/simulation_models/simulation_model.hpp"
 #include "cubesat_model.hpp"
 #include "math/quaternion/quaternion.hpp"
 #include "math/vector/vector.hpp"
@@ -13,12 +12,25 @@ namespace core
 {
 
 CubesatModel::CubesatModel(math::physics_models::IPhysicsModel *physics_model)
-	: SimulationModel(physics_model)
+	: _physics_model(physics_model)
 {
 }
 
 CubesatModel::~CubesatModel()
 {
+}
+
+void CubesatModel::update(uint64_t t, double delta_t)
+{
+	_physics_model->update(t, delta_t);
+
+	for (sensors::Sensor *s : _sensors)
+		s->update(t, delta_t);
+}
+
+void CubesatModel::add_sensor(sensors::Sensor *s)
+{
+	_sensors.push_back(s);
 }
 
 void CubesatModel::to_bytes(std::vector<uint8_t> &buffer)
